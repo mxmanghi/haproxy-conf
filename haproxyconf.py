@@ -76,14 +76,11 @@ class ACL:
 
 class Backend:
     def __init__(self,idx,name,mode,target_ip,target_port):
-        self.idx          = idx
-
-        name = name.replace('.','_')
-        self.backend_name = f"bk_{name}_{target_ip.replace('.','_')}_{target_port}",
-        #self.backend_name = bkname
-        self.mode         = mode
-        self.target_ip    = target_ip
-        self.target_port  = target_port
+        self.idx            = idx
+        self.backend_name   = f"bk_{name.replace('.','_')}_{target_ip.replace('.','_')}_{target_port}"
+        self.mode           = mode
+        self.target_ip      = target_ip
+        self.target_port    = target_port
 
     def name(self):
         return self.backend_name
@@ -186,6 +183,7 @@ def register_backend (idx,be_name,mode,target_ip,target_port):
     be_name = be.name()
     if (be_name not in backends):
         backends[be_name] = be
+
     return be
 
 
@@ -290,15 +288,15 @@ def main():
                 fe.register_acl(be,acl)
 
     with open(args.output, 'w') as fout:
+        print("----------------")
         print("Writing backends configuration....")
         for be in backends:
-            print("----------------")
-            print(str(be))
-            fout.write(str(be)+'\n')
+            print(str(backends[be]))
+            fout.write(str(backends[be])+'\n')
 
+        print("----------------")
         print("Writing frontends configuration....")
         for fe in frontends:
-            print("----------------")
             print(str(fe))
             fout.write(str(frontends[fe])+'\n')
 
