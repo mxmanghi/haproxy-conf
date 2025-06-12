@@ -122,7 +122,7 @@ class Frontend:
 
 
         if self.port == 443:
-            decl_l.append(f"   bind :443 ssl crt /etc/haproxy/certs/ strict-sni")
+            decl_l.append(f"    bind :443 ssl crt /etc/haproxy/certs/ strict-sni")
             decl_l.append(" ".join(le_challenge_response))
         else:
             decl_l.append(f"    bind   *:{self.port}")
@@ -233,7 +233,6 @@ def main():
 
     # Start writing config
     for idx, row in df.iterrows():
-        #print(f" -> {idx}: {str(row)}")
 
         # column 'Status' controls a service that is by default disabled
         # By putting 'enable' in this column enables the generation of its
@@ -257,7 +256,7 @@ def main():
         port = int(row['Port'])
         target_ip = str(row['Target IP']).strip()
         target_port = row['Target Port']
-        mode = 'http' if svc_type == 'http' else 'tcp'
+        mode = 'http' if svc_type == 'http' or svc_type == 'https' else 'tcp'
 
         fe_name = f"srv_{svc_type}_{port}"
         fe = register_frontend(svc_type,fe_name,port)
